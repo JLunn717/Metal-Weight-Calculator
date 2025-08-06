@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metal Plate Weight Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f2f2f2;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Metal Plate Weight Calculator</h2><label for="material">Material</label>
+<select id="material">
+  <option value="0.284">Steel</option>
+  <option value="0.0975">Aluminum</option>
+  <option value="0.289">Stainless Steel</option>
+</select>
+
+<label for="shape">Shape</label>
+<select id="shape">
+  <option value="rectangle">Rectangle</option>
+  <option value="circle">Circle</option>
+</select>
+
+<label for="thickness">Thickness (inches)</label>
+<input type="number" id="thickness" step="0.01">
+
+<div id="rectInputs">
+  <label for="width">Width (inches)</label>
+  <input type="number" id="width" step="0.01">
+
+  <label for="length">Length (inches)</label>
+  <input type="number" id="length" step="0.01">
+</div>
+
+<div id="circleInputs" style="display:none">
+  <label for="diameter">Diameter (inches)</label>
+  <input type="number" id="diameter" step="0.01">
+</div>
+
+<label for="quantity">Quantity</label>
+<input type="number" id="quantity" value="1">
+
+<button onclick="calculateWeight()">Calculate Weight</button>
+
+<div id="result"></div>
+
+  </div>  <script>
+    const shapeSelect = document.getElementById("shape");
+    const rectInputs = document.getElementById("rectInputs");
+    const circleInputs = document.getElementById("circleInputs");
+
+    shapeSelect.addEventListener("change", function () {
+      const shape = shapeSelect.value;
+      rectInputs.style.display = shape === "rectangle" ? "block" : "none";
+      circleInputs.style.display = shape === "circle" ? "block" : "none";
+    });
+
+    function calculateWeight() {
+      const materialDensity = parseFloat(document.getElementById("material").value);
+      const thickness = parseFloat(document.getElementById("thickness").value);
+      const quantity = parseInt(document.getElementById("quantity").value);
+      let volume = 0;
+
+      if (shapeSelect.value === "rectangle") {
+        const width = parseFloat(document.getElementById("width").value);
+        const length = parseFloat(document.getElementById("length").value);
+        volume = width * length * thickness;
+      } else if (shapeSelect.value === "circle") {
+        const diameter = parseFloat(document.getElementById("diameter").value);
+        const radius = diameter / 2;
+        volume = Math.PI * radius * radius * thickness;
+      }
+
+      const weight = volume * materialDensity * quantity;
+      document.getElementById("result").innerText = `Total Weight: ${weight.toFixed(2)} lbs`;
+    }
+  </script></body>
+</html>
